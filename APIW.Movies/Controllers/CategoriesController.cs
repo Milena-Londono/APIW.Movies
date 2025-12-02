@@ -15,7 +15,7 @@ namespace APIW.Movies.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetCategoriesAsync")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -25,7 +25,7 @@ namespace APIW.Movies.Controllers
             return Ok(categoriesDto);
         }
 
-        [HttpGet("{id:int}", Name = "GetCategoryAsync")]
+        [HttpGet("{id:int}", Name = "GetCategoryByIdAsync")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -34,8 +34,40 @@ namespace APIW.Movies.Controllers
         {
             var categoryDto = await _categoryService.GetCategoryAsync(id);
             return Ok(categoryDto);
+        }
 
+        [HttpPost( Name = "CreateCategoryAsync")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<ActionResult<CategoryDto>> CreateCategoryAsync([FromBody] CategoryCreateDto categoryCreateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            try
+            {
+                var createdCategory = await _categoryService.CreateCategoryAsync(categoryCreateDto);
+
+                //Vamos a retornar un 201 Created con la ruta para obtener la categoria creada
+                return CreatedAtRoute(
+                    "GetCategoryByIdAsync",           //1er parametro: nombre de la ruta
+                    new {id = createdCategory.Id},   //2do parametro: los valores de los parametros de la ruta
+                    createdCategory                  //3er parametro: el objeto creado
+                    );
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("Ya existe"))
+            {
+                return Conflict(new {ex.Message});
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }
