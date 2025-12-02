@@ -1,4 +1,5 @@
-﻿using APIW.Movies.DAL.Models;
+﻿using APIMovie.DAL.Models;
+using APIW.Movies.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace APIW.Movies.DAL
@@ -13,5 +14,7 @@ namespace APIW.Movies.DAL
         //Sección para crear el dbset de las entidades o modelos
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Movie> Movies { get; set; }
+
     }
 }

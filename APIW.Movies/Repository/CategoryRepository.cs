@@ -12,11 +12,8 @@ namespace APIW.Movies.Repository
 
         public CategoryRepository(ApplicationDbContext context) 
         { 
-        
             _context = context; 
-
         }
-
 
         public async Task<bool> CategoryExistsByIdAsync(int id)
         {
@@ -37,8 +34,6 @@ namespace APIW.Movies.Repository
             category.CreatedDate = DateTime.UtcNow;
             await _context.Categories.AddAsync(category);
             return await SaveAsync();
-            //SQL INSERT
-
         }
 
         public async Task<bool> DeleteCategoryAsync(int id)
@@ -58,25 +53,22 @@ namespace APIW.Movies.Repository
         {
             return await _context.Categories
            .AsNoTracking()
-           .OrderBy(c => c.Name) //Ascendente
+           .OrderBy(c => c.Name)
            .ToListAsync();
         }
 
-        public async Task<Category> GetCategoryAsync(int id)
+        public async Task<Category> GetCategoryAsync(int id) // Async y await
         {
             return await _context.Categories
                 .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == id);//lambda expressions
-
-            
+                .FirstOrDefaultAsync(c => c.Id == id);//lambda expressions           
         }
 
         public async Task<bool> UpdateCategoryAsync(Category category)
         {
             category.ModifiedDate = DateTime.UtcNow;
             _context.Categories.Update(category);
-            return await SaveAsync();
-            
+            return await SaveAsync();         
         }
 
         private async Task<bool> SaveAsync()

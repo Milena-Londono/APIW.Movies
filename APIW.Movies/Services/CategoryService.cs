@@ -26,7 +26,6 @@ namespace APIW.Movies.Services
         {
             throw new NotImplementedException();
         }
-
         public Task<bool> CreateCategoryAsync(Category category)
         {
             throw new NotImplementedException();
@@ -37,21 +36,28 @@ namespace APIW.Movies.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<CategoryDto>> GetCategoriesAsync()
-        {
-            var categories = _categoryRepository.GetCategoriesAsync();//Solo estoy llamando el método desde la capa Repository
-            return _mapper.Map<ICollection<CategoryDto>>(categories); //Mapeo la lista de categorías a una lista de categorías DTO
-           
-        }
 
-        public Task<Category> GetCategoryAsync(int id)
+
+        public Task<CategoryDto> GetCategoryAsync(int id)
         {
             throw new NotImplementedException();
         }
+
+        public async Task<ICollection<CategoryDto>> GetCategoriesAsync()
+        {
+            
+            var categories =  _categoryRepository.GetCategoriesAsync();//Estoy llamando el metodo desde la capa repository
+
+            return _mapper.Map<ICollection<CategoryDto>>(categories); //Mapeo la lista de categorias
+        }
+
+
 
         public Task<bool> UpdateCategoryAsync(Category category)
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }
