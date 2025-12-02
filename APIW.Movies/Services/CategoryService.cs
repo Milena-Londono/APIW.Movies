@@ -17,47 +17,50 @@ namespace APIW.Movies.Services
             _mapper = mapper;
          }
 
-        public Task<bool> CategoryExistsByIdAsync(int id)
+        public async Task<bool> CategoryExistsByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> CategoryExistsByNameAsync(string name)
+        public async Task<bool> CategoryExistsByNameAsync(string name)
         {
-            throw new NotImplementedException();
-        }
-        public Task<bool> CreateCategoryAsync(Category category)
-        {
-            throw new NotImplementedException();
+             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteCategoryAsync(int id)
+        public async Task<CategoryDto> CreateCategoryAsync(CategoryCreateDto categoryDto)
         {
             throw new NotImplementedException();
-        }
+    }
 
-
-
-        public Task<CategoryDto> GetCategoryAsync(int id)
-        {
+      public async Task<bool> DeleteCategoryAsync(int id)
+      {
             throw new NotImplementedException();
         }
 
         public async Task<ICollection<CategoryDto>> GetCategoriesAsync()
-        {
-            
-            var categories =  _categoryRepository.GetCategoriesAsync();//Estoy llamando el metodo desde la capa repository
+{
+            //Estoy llamando el metodo desde la capa repository
+            var categories = await _categoryRepository.GetCategoriesAsync();
 
-            return _mapper.Map<ICollection<CategoryDto>>(categories); //Mapeo la lista de categorias
+            //Mapeo la lista de categorias
+            return _mapper.Map<ICollection<CategoryDto>>(categories);
         }
 
 
-
-        public Task<bool> UpdateCategoryAsync(Category category)
+        public async Task<CategoryDto> GetCategoryAsync(int id)
         {
+            //Obtener la categoria del repositorio
+            var category = await _categoryRepository.GetCategoryAsync(id);
+
+            //Mapear toda la colección de una vez
+            return _mapper.Map<CategoryDto>(category); 
+        }
+        
+        public Task<CategoryDto> UpdateCategoryAsync(int id, Category categoryDto)
+  {
             throw new NotImplementedException();
         }
 
         
-    }
+ }
 }
